@@ -7,7 +7,7 @@ import requests
 import voluptuous as vol
 
 from homeassistant.components.device_tracker import (
-    PLATFORM_SCHEMA, SOURCE_TYPE_GPS)
+    PLATFORM_SCHEMA, SOURCE_TYPE_GPS, CONF_SCAN_INTERVAL )
 from homeassistant.const import (
     CONF_DEVICES, CONF_TOKEN, CONF_URL)
 import homeassistant.helpers.config_validation as cv
@@ -18,7 +18,7 @@ from homeassistant.util import slugify, Throttle
 _LOGGER = logging.getLogger(__name__)
 
 CONF_MAX_GPS_ACCURACY = 'max_gps_accuracy'
-UPDATE_INTERVAL = timedelta(minutes=5)
+UPDATE_INTERVAL = timedelta(minutes=2)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_DEVICES): vol.All(cv.ensure_list, [cv.string]),
@@ -50,10 +50,9 @@ class PhoneTrackDeviceTracker(object):
         self._update_info()
 
         track_time_interval(
-            hass, self._update_info, UPDATE_INTERVAL
+            hass, self._update_info, config.get(CONF_SCAN_INTERVAL) or UPDATE_INTERVAL
         )
 
-    @Throttle(UPDATE_INTERVAL)
     def _update_info(self, now=None):
         """Update the device info."""
         _LOGGER.debug("Updating devices %s", now)
