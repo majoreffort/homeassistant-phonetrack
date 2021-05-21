@@ -1,6 +1,7 @@
 {
   "domain": "phonetrack",
   "name": "PhoneTrack",
+  "version": "2021.01",
   "documentation": "https://github.com/j1nx/homeassistant-phonetrack",
   "requirements": [],
   "dependencies": [],
